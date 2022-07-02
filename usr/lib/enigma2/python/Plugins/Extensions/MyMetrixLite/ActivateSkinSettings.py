@@ -128,7 +128,8 @@ class ActivateSkinSettings:
 			self.EHDres = 'HD'
 			self.EHDtxt = 'Standard HD'
 			if onlyCheck or not self.silent:
-				self.ErrorCode = 'checkEHDsettings', _("Your enhanced hd settings are inconsistent. Please check this.")
+				pass
+				#self.ErrorCode = 'checkEHDsettings', _("Your enhanced hd settings are inconsistent. Please check this.")
 
 	def CheckSettings(self, onlyCheck=False):
 		#first check is ehd tested, ehd-settings and available ehd-icons
@@ -138,7 +139,8 @@ class ActivateSkinSettings:
 			self.service_name = 'enigma2-plugin-skins-metrix-atv-%s-icons' % self.EHDres.lower()
 			if system('/usr/bin/opkg list-installed ' + self.service_name + ' | grep ' + self.service_name):
 				if onlyCheck or not self.silent:
-					self.ErrorCode = 'checkEHDsettings', _("Your enhanced hd settings are inconsistent. Please check this.")
+					pass
+					#self.ErrorCode = 'checkEHDsettings', _("Your enhanced hd settings are inconsistent. Please check this.")
 				elif self.silent:
 					stat = statvfs("/usr/share/enigma2/MetrixHD/")
 					freeflash = stat.f_bavail * stat.f_bsize / 1024 / 1024
@@ -1756,6 +1758,8 @@ class ActivateSkinSettings:
 		imga.save(name)
 
 	def updateIcons(self, target="HD"):
+		tested = config.plugins.MyMetrixLiteOther.EHDtested.value.split('_|_')
+		EHDtested = len(tested) == 2 and getBoxType() in tested[0] and config.plugins.MyMetrixLiteOther.EHDenabled.value in tested[1]
 		# backward compatibility - remove old icon files ---------------------------
 		dpathlist = ["/usr/share/enigma2/MetrixHD/",
 					"/usr/share/enigma2/MetrixHD/skin_default/buttons/",
@@ -1819,7 +1823,10 @@ class ActivateSkinSettings:
 			if path.exists(dest) and not path.exists(hd):
 				rename(dest, hd)
 			try:
-				symlink(src, dest)
+				if config.plugins.MyMetrixLiteOther.EHDenabled.value == '1' and EHDtested:
+					pass
+				else:
+					symlink(src, dest)
 			except OSError, e:
 				raise Exception(_("Can't create symlink:") + "\n%s\n---> %s\n(%s)" % (src, dest, e))
 
