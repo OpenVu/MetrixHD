@@ -1,0 +1,23 @@
+<skin>
+<!-- cf#_#start -->
+	<screen name="InfoBar" backgroundColor="transparent" flags="wfNoBorder" position="0,0" size="1920,1080" title="InfoBar">
+		<panel name="INFOBARKEYSNONVISIBLE" />
+		<panel name="INFOBARSTYLEMODERN" />
+		<panel name="CLOCKWIDGET" />
+		<panel name="INFOBARWEATHERWIDGET+1" />
+		
+		<widget font="global_large;120" backgroundColor="text-background" foregroundColor="background-text" noWrap="1" position="45,683" render="Label" size="1878,158" source="session.CurrentService" transparent="1" valign="bottom" zPosition="-30">
+				<convert type="MetrixHDExtServiceInfo">ServiceNumberAndName</convert>
+			</widget>
+		<panel name="INFOBARSERVICEINFO" />
+		<panel name="INFOBARRECORDSTATE" />
+		<panel name="INFOBARRESOLUTION" />
+		<panel name="INFOBARORBITALPOSITION" />
+		<panel name="INFOBARSNR" />
+		<panel name="INFOBARTUNERINFO-X" />
+		<!--panel name="STBINFO" /-->
+		<!--panel name="INFOBAREXTENDEDINFO" /-->
+		<!-- <panel name="GRIDLINES" /> */ -->
+		<panel name="SKINPART_infobar"/>
+	</screen>
+</skin>
