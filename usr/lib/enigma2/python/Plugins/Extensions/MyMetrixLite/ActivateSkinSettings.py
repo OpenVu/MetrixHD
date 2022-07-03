@@ -128,19 +128,25 @@ class ActivateSkinSettings:
 			self.EHDres = 'HD'
 			self.EHDtxt = 'Standard HD'
 			if onlyCheck or not self.silent:
-				pass
-				#self.ErrorCode = 'checkEHDsettings', _("Your enhanced hd settings are inconsistent. Please check this.")
+				if config.plugins.MyMetrixLiteOther.EHDenabled.value == '1' and EHDtested:
+					pass
+				else:
+					self.ErrorCode = 'checkEHDsettings', _("Your enhanced hd settings are inconsistent. Please check this.")
 
 	def CheckSettings(self, onlyCheck=False):
 		#first check is ehd tested, ehd-settings and available ehd-icons
+		tested = config.plugins.MyMetrixLiteOther.EHDtested.value.split('_|_')
+		EHDtested = len(tested) == 2 and getBoxType() in tested[0] and config.plugins.MyMetrixLiteOther.EHDenabled.value in tested[1]
 		self.getEHDSettings(onlyCheck)
 
 		if self.EHDenabled:
 			self.service_name = 'enigma2-plugin-skins-metrix-atv-%s-icons' % self.EHDres.lower()
 			if system('/usr/bin/opkg list-installed ' + self.service_name + ' | grep ' + self.service_name):
 				if onlyCheck or not self.silent:
-					pass
-					#self.ErrorCode = 'checkEHDsettings', _("Your enhanced hd settings are inconsistent. Please check this.")
+					if config.plugins.MyMetrixLiteOther.EHDenabled.value == '1' and EHDtested:
+						pass
+					else:
+						self.ErrorCode = 'checkEHDsettings', _("Your enhanced hd settings are inconsistent. Please check this.")
 				elif self.silent:
 					stat = statvfs("/usr/share/enigma2/MetrixHD/")
 					freeflash = stat.f_bavail * stat.f_bsize / 1024 / 1024
