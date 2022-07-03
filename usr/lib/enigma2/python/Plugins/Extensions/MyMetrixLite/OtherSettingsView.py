@@ -277,16 +277,23 @@ class OtherSettingsView(ConfigListScreen, Screen):
 			self.resetEHD()
 
 	def checkNetworkState(self, str, retval, extra_args):
+		tested = config.plugins.MyMetrixLiteOther.EHDtested.value.split('_|_')
+		EHDtested = len(tested) == 2 and getBoxType() in tested[0] and config.plugins.MyMetrixLiteOther.EHDenabled.value in tested[1]
 		if 'Collected errors' in str:
-			pass
-			#self.session.open(MessageBox, _("A background update check is in progress, please wait a few minutes and try again."), type=MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
-			#self.resetEHD()
+			if config.plugins.MyMetrixLiteOther.EHDenabled.value == '1' and EHDtested:
+				pass
+			else:
+				self.session.open(MessageBox, _("A background update check is in progress, please wait a few minutes and try again."), type=MessageBox.TYPE_INFO, timeout=10, close_on_any_key=True)
+				self.resetEHD()
 		elif not str:
-			self.feedscheck = self.session.open(MessageBox, _('Please wait whilst feeds state is checked.'), MessageBox.TYPE_INFO, enable_input=False)
-			self.feedscheck.setTitle(_('Checking Feeds'))
-			cmd1 = "opkg update"
-			self.CheckConsole = Console()
-			self.CheckConsole.ePopen(cmd1, self.checkNetworkStateFinished)
+			if config.plugins.MyMetrixLiteOther.EHDenabled.value == '1' and EHDtested:
+				pass
+			else:
+				self.feedscheck = self.session.open(MessageBox, _('Please wait whilst feeds state is checked.'), MessageBox.TYPE_INFO, enable_input=False)
+				self.feedscheck.setTitle(_('Checking Feeds'))
+				cmd1 = "opkg update"
+				self.CheckConsole = Console()
+				self.CheckConsole.ePopen(cmd1, self.checkNetworkStateFinished)
 
 	def checkNetworkStateFinished(self, result, retval, extra_args=None):
 		if 'bad address' in result:
